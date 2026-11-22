@@ -1,0 +1,160 @@
+<h1>WEMMBU9000 HUB </h1>
+<style>
+#leaderboard {
+    background-color #222;
+    border: 2px solid cyan;
+    border-radius: 15px;
+    width: 280px;
+    margin: 20px auto;
+    padding: 10px;
+    color:white;
+   }
+
+
+  
+  
+#xpbar {
+  width: 250px;
+  height: 20px;
+  background-color: gray;
+  border: 2px solid white;
+  border-radius: 10px;
+  margin: 20px auto;
+}
+
+#xpfill {
+  width: 0%;
+  height: 100%;
+  background-color: lime;
+  border-radius: 8px;
+}  
+  body {
+    color: cyan;
+    background-color: black;
+    text-align:center;
+   }
+
+button {
+  background-color: cyan;
+  color: black;
+  font-size: 20px;
+  border-radius:12px;
+  border: 2px solid white;
+  display: block;
+  margin: 10px auto
+}
+
+  h2 { 
+    position: fixed;
+    bottom: 10px;
+    left: 0 ;
+    width: 100% ;
+    text-align: center;
+    color:cyan;
+  }
+  
+</style>
+
+
+  <p style="color:hwb(59 6% 7%);">l LIKE CODEING</p>
+  <button onclick="startgame()">start</button>
+<button onclick="typeSound()">⌨️ TYPE</button>
+  <h2>WEMMBU9000</h2>
+<button onclick="changeMode()">mode</button>
+<p id="coins">coins
+  : 0</p>
+<button onclick="addcoins()">GET 10 COINS</button>
+<p id ="xp">xp: 0 </p>
+<p id="level">Level: 1</p>
+<div id="xpbar">
+  <div id="xpfill"></div>
+</div>
+<button onclick="addxp()">EARN 5 xp </button>
+   
+
+  <script>
+    function playSound(frequency) {
+  let audio = new AudioContext();
+  let oscillator = audio.createOscillator();
+
+  oscillator.frequency.value = frequency;
+  oscillator.connect(audio.destination);
+
+  oscillator.start();
+  oscillator.stop(audio.currentTime + 0.15);
+    }
+    function typeSound() {
+  let audio = new Audio("keyboard.mp3");
+  audio.currentTime = 0;
+  audio.play();
+    }
+
+
+
+    
+    let xp = 0
+    let level = 1
+
+    function addxp () {
+      xp = xp + 10;
+      document.getElementById("xp").innerHTML= "xp:" + xp;
+      document.getElementById("xpfill").style.width = xp + "%";
+
+      if (xp >= 100) {
+  level = level + 1; playSound(700);
+  xp = 0;
+  document.getElementById("level").innerHTML = "Level: " + level;
+  document.getElementById("xp").innerHTML = "XP: " + xp;
+      }
+    }
+    
+    let coins = 0;
+
+function addcoins() {
+  coins = coins + 5; playSound(500);
+  document.getElementById("coins").innerHTML = "Coins: " + coins;
+}
+    let mode = 0;
+
+    function changeMode () {
+      if (mode ===0 ) {
+        document.body.style.backgroundColor
+          ="purple"; 
+      }
+                            
+      else if (mode === 1) {
+        document.body.style.backgroundColor 
+          ="white";
+      }                                        
+                           
+      else if (mode === 2) {
+        document.body.style.backgroundColor 
+          ="black";
+      }                                        
+                          mode = mode + 1;
+                            
+      if (mode === 3) {
+                             
+        mode = 0;
+      }
+    }
+      
+                                             
+                          
+    
+  
+    function startgame() {
+  window.location.href = "game.html";
+    }
+                    
+                           
+                        
+  </script>
+<h1>🏆 LEADERBOARD</h1>
+
+<div id="leaderboard">
+  <p>🥇 1. WEMMBU9000 - 1000 XP</p>
+  <p>🥈 2. Alex - 350 XP</p>
+  <p>🥉 3. stive - 200 XP</p>
+</div>
+ 

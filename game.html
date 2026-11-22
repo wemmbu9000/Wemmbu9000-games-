@@ -1,0 +1,258 @@
+<h1>WEMMBU9000 GAMES</h1>
+<p>HI GUYS</p>
+<style>
+  #game {
+  display: grid;
+  grid-template-columns: repeat(3, 70px);
+  justify-content: center;
+  gap: 5px;
+}
+
+#game button {
+  width: 70px;
+  height: 70px;
+  font-size: 30px;
+  margin: 0;
+}
+  #LEADERBOARD {
+    background-color: #222;
+    border: 2px solid cyan;
+    border-radius: 15px;
+    width: 280px;
+    margin: 20px auto;
+    padding: 10px;
+    color:white;
+  }
+ 
+  button {
+    background-color:cyan;
+    color:black;
+    border-radius: 20px;
+    border:white;
+    font-size: 15px;
+    margin: 10px;
+    border: 2px solid white;
+    width: 200px;
+    
+  }
+  body {
+    color:cyan;
+    background-color: black;
+    text-align:center;
+    
+  }
+
+  h2 {
+    text-align: center;
+    color:cyan;
+  }
+  </style>
+<h2>TIC-TAC-TOE</h2>
+
+<div id="game">
+  <button onclick="move(0)"></button>
+  <button onclick="move(1)"></button>
+  <button onclick="move(2)"></button>
+  <button onclick="move(3)"></button>
+  <button onclick="move(4)"></button>
+  <button onclick="move(5)"></button>
+  <button onclick="move(6)"></button>
+  <button onclick="move(7)"></button>
+  <button onclick="move(8)"></button>
+</div>
+
+<p id="status">Player X's turn</p>
+<button onclick="resetGame()">RESET GAME</button>
+<div id="LEADERBOARD">
+<h2>LEADERBOARD</h2>
+
+<p>🥇 LUKA — 100 XP</p>
+<p>🥈 sarkis — 75 XP</p>
+<p>🥉 lizi — -50 XP</p>
+</div>
+<button onclick ="play()">PLAY</button>
+
+<div id="snakeGame" style="display:none;">
+  <h2>SNAKE GAME 🐍</h2>
+
+  <canvas id="canvas" width="300" height="300"
+    style="background:#222; border:2px solid cyan;">
+  </canvas>
+
+<div>
+  <button onclick="changeDirection('up')">⬆️</button>
+  
+  <button onclick="changeDirection('left')">⬅️</button>
+  
+  <button onclick="changeDirection('right')">➡️</button>
+  <button onclick="changeDirection('down')">⬇️</button>
+</div>
+
+
+  
+
+  <p id="score">Score: 0</p>
+
+  <button onclick="startSnake()">START SNAKE</button>
+  <button onclick="goHome()">BACK</button>
+</div>
+
+<script>
+  function play() {
+  document.getElementById("game").style.display = "none";
+  document.getElementById("LEADERBOARD").style.display = "none";
+  document.getElementById("snakeGame").style.display = "block";
+}
+
+function goHome() {
+  document.getElementById("snakeGame").style.display = "none";
+  document.getElementById("game").style.display = "grid";
+  document.getElementById("LEADERBOARD").style.display = "block";
+}
+  let snake = [{x:150, y:150}];
+let food = {x:50, y:50};
+let dx = 10;
+let dy = 0;
+let score = 0;
+let snakeTimer;
+  
+  let board = ["", "", "", "", "", "", "", "", ""];
+let gameOver = false;
+
+function move(i) {
+  if (board[i] !== "" || gameOver) return;
+
+  board[i] = "X";
+  let buttons = document.querySelectorAll("#game button");
+  buttons[i].textContent = "X";
+
+  if (checkWinner("X")) return;
+
+  let empty = [];
+
+  for (let j = 0; j < 9; j++) {
+    if (board[j] === "") empty.push(j);
+  }
+
+  if (empty.length === 0) {
+    document.getElementById("status").textContent = "DRAW!";
+    gameOver = true;
+    return;
+  }
+
+  let choice = empty[Math.floor(Math.random() * empty.length)];
+  board[choice] = "O";
+  buttons[choice].textContent = "O";
+
+  if (!checkWinner("O")) {
+    document.getElementById("status").textContent = "Your turn!";
+  }
+}
+
+function checkWinner(p) {
+  let wins = [
+    [0,1,2], [3,4,5], [6,7,8],
+    [0,3,6], [1,4,7], [2,5,8],
+    [0,4,8], [2,4,6]
+  ];
+
+  for (let line of wins) {
+    if (line.every(i => board[i] === p)) {
+      document.getElementById("status").textContent = p + " WINS!";
+      gameOver = true;
+      return true;
+    }
+    
+    
+  }
+
+  if (board.every(cell => cell !== "")) {
+    document.getElementById("status").textContent = "DRAW!";
+    gameOver = true;
+    return true;
+  }
+
+  return false;
+}
+  function resetGame() {
+  board = ["", "", "", "", "", "", "", "", ""];
+  gameOver = false;
+
+  let buttons = document.querySelectorAll("#game button");
+
+  buttons.forEach(button => {
+    button.textContent = "";
+  });
+
+  document.getElementById("status").textContent = "Player X's turn";
+  }
+  
+  
+
+function startSnake() {
+  clearInterval(snakeTimer);
+  snake = [{x:150, y:150}];
+  food = {x:50, y:50};
+  dx = 10;
+  dy = 0;
+  score = 0;
+  document.getElementById("score").textContent = "Score: 0";
+  drawSnake();
+  snakeTimer = setInterval(moveSnake, 150);
+}
+  
+
+
+
+function moveSnake() {
+  let head = {x:snake[0].x + dx, y:snake[0].y + dy};
+
+  if (head.x < 0 || head.x >= 300 ||
+      head.y < 0 || head.y >= 300) {
+    clearInterval(snakeTimer);
+    alert("GAME OVER! Score: " + score);
+    return;
+  }
+
+  snake.unshift(head);
+
+  if (head.x === food.x && head.y === food.y) {
+    score++;
+    document.getElementById("score").textContent = "Score: " + score;
+    food = {
+      x:Math.floor(Math.random()*30)*10,
+      y:Math.floor(Math.random()*30)*10
+    };
+  } else {
+    snake.pop();
+  }
+
+  drawSnake();
+}
+
+function drawSnake() {
+  let ctx = document.getElementById("canvas").getContext("2d");
+  ctx.clearRect(0,0,300,300);
+  ctx.fillStyle = "lime";
+  snake.forEach(part => ctx.fillRect(part.x,part.y,10,10));
+  ctx.fillStyle = "red";
+  ctx.fillRect(food.x,food.y,10,10);
+}
+
+function changeDirection(direction) {
+  if (direction === "up" && dy === 0) {dx=0;dy=-10;}
+  if (direction === "down" && dy === 0) {dx=0;dy=10;}
+  if (direction === "left" && dx === 0) {dx=-10;dy=0;}
+  if (direction === "right" && dx === 0) {dx=10;dy=0;}
+}
+  
+  
+</script>
+
+
+
+  
+
+
+  
+      
